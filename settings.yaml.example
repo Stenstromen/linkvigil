@@ -1,0 +1,6 @@
+---
+- name: API Backend
+  type: "status"
+  url: "https://api.example.com/status"
+  page_id: "page_id"
+  component_id: "component_id"
