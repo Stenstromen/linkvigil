@@ -12,7 +12,7 @@ STATUSPAGE_API_KEY - The API key for the Statuspage API.
 
 ### Settings File
 
-Please see `settings.yaml.example` for an example of the settings file. The settings file should be named `settings.yaml` and should be placed in the root directory of the project.
+Please see `endpoints.yaml.example` for an example of the settings file. The settings file should be named `endpoints.yaml` and should be placed in the root directory of the project.
 
 ## Metrics and Thresholds
 

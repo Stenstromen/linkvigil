@@ -70,16 +70,20 @@ func updateComponentStatus(c *http.Client, endpoint Endpoint, status ComponentSt
 }
 
 func main() {
+	var endpointsFilePath string
 	var debug bool = false
 
 	args := os.Args[1:]
 	if len(args) > 0 {
-		if args[0] == "debug" {
+		endpointsFilePath = args[0]
+		if len(args) > 1 && args[1] == "debug" {
 			debug = true
 		}
+	} else {
+		log.Fatalf("error: no endpoints file provided")
 	}
 
-	data, err := os.ReadFile("settings.yaml")
+	data, err := os.ReadFile(endpointsFilePath)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
@@ -98,8 +102,11 @@ func main() {
 			start := time.Now()
 			resp, err := http.Get(endpoint.URL)
 			if err != nil {
-				log.Printf("HTTP request failed: %v", err)
-				log.Printf("Status: CRITICAL")
+				if debug {
+					log.Printf("DEBUG CRITICAL - %s HTTP request failed: %v", endpoint.Name, err)
+				} else {
+					log.Printf("CRITICAL - %s HTTP request failed: %v", endpoint.Name, err)
+				}
 				continue
 			}
 
