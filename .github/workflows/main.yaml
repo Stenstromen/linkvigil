@@ -23,3 +23,5 @@ jobs:
           version: latest
           args: release --clean
           workdir: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
