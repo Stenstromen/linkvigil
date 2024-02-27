@@ -10,10 +10,10 @@ import (
 	"github.com/stenstromen/linkvigil/types"
 )
 
-func main() {
-	var endpointsFilePath string
-	var debug bool = false
+var endpointsFilePath string
+var debug bool = false
 
+func init() {
 	args := os.Args[1:]
 	if len(args) > 0 {
 		endpointsFilePath = args[0]
@@ -24,6 +24,13 @@ func main() {
 		log.Fatalf("error: no endpoints file provided")
 	}
 
+	_, err := os.LookupEnv("STATUSPAGE_API_KEY")
+	if !err {
+		log.Fatalf("error: STATUSPAGE_API_KEY environment variable not set")
+	}
+}
+
+func main() {
 	data, err := os.ReadFile(endpointsFilePath)
 	if err != nil {
 		log.Fatalf("error: %v", err)
