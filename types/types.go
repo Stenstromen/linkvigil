@@ -17,12 +17,6 @@ const (
 
 type ComponentUpdateRequest struct {
 	Component struct {
-		Description        string          `json:"description"`
-		Status             ComponentStatus `json:"status"`
-		Name               string          `json:"name"`
-		OnlyShowIfDegraded bool            `json:"only_show_if_degraded"`
-		GroupId            string          `json:"group_id"`
-		Showcase           bool            `json:"showcase"`
-		StartDate          string          `json:"start_date"`
+		Status ComponentStatus `json:"status"`
 	} `json:"component"`
 }
