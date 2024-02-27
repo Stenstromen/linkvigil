@@ -12,7 +12,6 @@ type ComponentStatus string
 const (
 	Operational         ComponentStatus = "operational"
 	DegradedPerformance ComponentStatus = "degraded_performance"
-	PartialOutage       ComponentStatus = "partial_outage"
 	MajorOutage         ComponentStatus = "major_outage"
 )
 
