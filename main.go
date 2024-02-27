@@ -70,6 +70,15 @@ func updateComponentStatus(c *http.Client, endpoint Endpoint, status ComponentSt
 }
 
 func main() {
+	var debug bool = false
+
+	args := os.Args[1:]
+	if len(args) > 0 {
+		if args[0] == "debug" {
+			debug = true
+		}
+	}
+
 	data, err := os.ReadFile("settings.yaml")
 	if err != nil {
 		log.Fatalf("error: %v", err)
@@ -97,15 +106,31 @@ func main() {
 			responseTime := time.Since(start)
 
 			if responseTime > 500*time.Millisecond {
-				log.Printf("WARNING - %s Degraded Performance", endpoint.Name)
+				if debug {
+					log.Printf("DEBUG WARNING - %s Degraded Performance", endpoint.Name)
+				} else {
+					log.Printf("WARNING - %s Degraded Performance", endpoint.Name)
+				}
 			}
 
 			if resp.StatusCode == 200 {
-				log.Printf("OK - %s HTTP Status 200", endpoint.Name)
+				if debug {
+					log.Printf("DEBUG OK - %s HTTP Status 200", endpoint.Name)
+				} else {
+					log.Printf("OK - %s HTTP Status 200", endpoint.Name)
+				}
 			} else if resp.StatusCode == 500 {
-				log.Printf("CRITICAL - %s Malfunctioning", endpoint.Name)
+				if debug {
+					log.Printf("DEBUG CRITICAL - %s Malfunctioning", endpoint.Name)
+				} else {
+					log.Printf("CRITICAL - %s Malfunctioning", endpoint.Name)
+				}
 			} else {
-				log.Printf("INFO - %s HTTP Status %s", endpoint.Name, resp.Status)
+				if debug {
+					log.Printf("DEBUG INFO - %s HTTP Status %s", endpoint.Name, resp.Status)
+				} else {
+					log.Printf("INFO - %s HTTP Status %s", endpoint.Name, resp.Status)
+				}
 			}
 		}
 	}
