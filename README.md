@@ -1,5 +1,7 @@
 # LinkVigil
 
+![Logo](logo.webp)
+
 ## Description
 
 LinkVigil is a simple tool to monitor the status of API endpoints and posts their status to Atlassian Statuspage via its API.
@@ -35,12 +37,58 @@ Example:
 ./linkvigil /path/to/endpoints.yaml debug
 ```
 
+## Linux Systemd Service
+
+1. Download the binary from the latest release.
+2. Create a settings file and place it in `/etc/linkvigil.yaml`.
+3. Create a systemd service file in `/etc/systemd/system/linkvigil.service`:
+
+```ini
+[Unit]
+Description=LinkVigil
+Wants=network-online.target
+After=network-online.target
+AssertFileIsExecutable=/usr/local/bin/linkvigil
+
+[Service]
+WorkingDirectory=/usr/local/
+User=linkvigil
+Group=linkvigil
+EnvironmentFile=/etc/default/linkvigil
+ExecStart=/usr/local/bin/linkvigil /etc/linkvigil.yaml 2>&1 | logger -t linkvigil
+Restart=always
+TasksMax=infinity
+TimeoutStopSec=infinity
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target
+```
+
+4. Create a user and group for the service:
+
+```bash
+sudo useradd -r -s /bin/false linkvigil
+```
+
+5. Add the API key to `/etc/default/linkvigil`:
+
+```bash
+STATUSPAGE_API_KEY=your-api-key
+```
+
+6. Enable and start the service:
+
+```bash
+sudo systemctl enable linkvigil --now
+```
+
 ## Metrics and Thresholds
 
-| Event    | Action   |
-| -------- | -------- |
-| Endpoint Respond Status 200 | Post Status *Operational* |
-| Endpoint Response Time Above 500ms | Post Status *Degraded* |
-| Endpoint Respond Status 500 | Post Status *Major Outage* |
-| Endpoint Not Responding | Post Status *Major Outage* |
-| Any Other Response Status | Info Log Endpoint And HTTP Status |
+| Event                              | Action                            |
+| ---------------------------------- | --------------------------------- |
+| Endpoint Respond Status 200        | Post Status _Operational_         |
+| Endpoint Response Time Above 500ms | Post Status _Degraded_            |
+| Endpoint Respond Status 500        | Post Status _Major Outage_        |
+| Endpoint Not Responding            |  Post Status _Major Outage_       |
+| Any Other Response Status          | Info Log Endpoint And HTTP Status |
