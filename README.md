@@ -71,13 +71,19 @@ WantedBy=multi-user.target
 sudo useradd -r -s /bin/false linkvigil
 ```
 
-5. Add the API key to `/etc/default/linkvigil`:
+5. Change ownership of binary:
+
+```bash
+chown linkvigil: /usr/local/bin/linkvigil
+```
+
+6. Add the API key to `/etc/default/linkvigil`:
 
 ```bash
 STATUSPAGE_API_KEY=your-api-key
 ```
 
-6. Enable and start the service:
+7. Enable and start the service:
 
 ```bash
 sudo systemctl enable linkvigil --now
