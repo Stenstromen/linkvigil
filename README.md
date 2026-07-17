@@ -96,5 +96,6 @@ sudo systemctl enable linkvigil --now
 | Endpoint Respond Status 200        | Post Status _Operational_         |
 | Endpoint Response Time Above 500ms | Post Status _Degraded_            |
 | Endpoint Respond Status 500        | Post Status _Major Outage_        |
+| Endpoint Respond Status 503        | Post Status _Major Outage_        |
 | Endpoint Not Responding            | Post Status _Major Outage_        |
 | Any Other Response Status          | Info Log Endpoint And HTTP Status |

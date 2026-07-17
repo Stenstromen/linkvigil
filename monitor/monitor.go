@@ -50,6 +50,13 @@ func Monitor(endpoints []types.Endpoint, debug bool) {
 					log.Printf("CRITICAL - %s Malfunctioning", endpoint.Name)
 					api.UpdateComponentStatus(http.DefaultClient, endpoint, types.MajorOutage)
 				}
+			case resp.StatusCode == 503:
+				if debug {
+					log.Printf("DEBUG CRITICAL - %s Service Unavailable", endpoint.Name)
+				} else {
+					log.Printf("CRITICAL - %s Service Unavailable", endpoint.Name)
+					api.UpdateComponentStatus(http.DefaultClient, endpoint, types.MajorOutage)
+				}
 			default:
 				if debug {
 					log.Printf("DEBUG INFO - %s HTTP Status %s", endpoint.Name, resp.Status)
